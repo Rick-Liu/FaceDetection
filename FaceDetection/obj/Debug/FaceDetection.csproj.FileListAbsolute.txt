@@ -34,3 +34,38 @@ E:\Develop\Software Develop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.
 E:\Develop\Software Develop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.csproj.CopyComplete
 E:\Develop\Software Develop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.exe
 E:\Develop\Software Develop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.pdb
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\FaceDetection.exe.config
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\FaceDetection.exe
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\FaceDetection.pdb
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.UI.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.UI.GL.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.World.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\OpenTK.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\OpenTK.GLControl.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\ZedGraph.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.UI.xml
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.UI.GL.xml
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\Emgu.CV.World.xml
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\OpenTK.xml
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\OpenTK.GLControl.xml
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\ZedGraph.xml
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\de\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\es\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\fr\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\hu\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\it\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\ja\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\pt\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\ru\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\sk\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\sv\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\tr\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\zh-cn\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\bin\Debug\zh-tw\ZedGraph.resources.dll
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.csprojAssemblyReference.cache
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.Form1.resources
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.Properties.Resources.resources
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.csproj.GenerateResource.cache
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.csproj.CopyComplete
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.exe
+D:\桌面資料夾\SoftwareDevelop\FaceDetection\FaceDetection\obj\Debug\FaceDetection.pdb

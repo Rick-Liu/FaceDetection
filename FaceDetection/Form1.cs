@@ -30,7 +30,7 @@ namespace FaceDetection
 
         public class TrainedFileListFromImage
         {
-            public List<Mat> trainedImage = new List<Mat>();
+            public List<Image<Gray,byte>> trainedImage = new List<Image<Gray, byte>>();
             public List<int> trainedLabelOrder = new List<int>();
             public List<string> trainedFileName = new List<string>();
         }
@@ -59,7 +59,8 @@ namespace FaceDetection
 
         CascadeClassifier FaceCascadeClassifier;
         Mat OrgMat = new Mat();
-
+        Mat CurrentFaceMat = new Mat();
+        TrainedFaceRecognizerFromImage Tfr;
         public TrainedFileList SetSampleFacesList()
         {
             TrainedFileList tf = new TrainedFileList();
@@ -97,15 +98,34 @@ namespace FaceDetection
         }
 
 
-        public TrainedFaceRecognizerFromImage SetTrainedFaceRecognizerFromImage(FaceRecognizerType type)
+        public TrainedFaceRecognizerFromImage SetTrainedFaceRecognizerFromImage(FaceRecognizerType type,Mat srcMat,string name)
         {
 
             TrainedFaceRecognizerFromImage tfr = new TrainedFaceRecognizerFromImage();
             TrainedFileListFromImage tfList = new TrainedFileListFromImage();
-            tfList.trainedFileName.Add("NA");
-            tfList.trainedImage.Add(new Mat());
-            tfList.trainedLabelOrder.Add(1);
+
+            //tfList.trainedFileName.Add(name);
+            //tfList.trainedImage.Add(srcMat.ToImage<Gray,byte>());
+            //if (Tfr != null)
+            //    tfList.trainedLabelOrder.Add(Tfr.TrainedFileList.trainedLabelOrder.Count() + 1);
+            //else
+            //    tfList.trainedLabelOrder.Add(0);
+            //tfr.TrainedFileList = tfList;
+            if (Tfr.TrainedFileList==null || Tfr.TrainedFileList.trainedLabelOrder.Count ==0)
+            {
+                tfList.trainedFileName.Add(name);
+                tfList.trainedImage.Add(srcMat.ToImage<Gray, byte>());
+                tfList.trainedLabelOrder.Add(0);
+            }
+            else
+            {
+                tfList = Tfr.TrainedFileList;
+                tfList.trainedFileName.Add(name);
+                tfList.trainedImage.Add(srcMat.ToImage<Gray, byte>());
+                tfList.trainedLabelOrder.Add(tfList.trainedLabelOrder.Count());
+            }
             tfr.TrainedFileList = tfList;
+
             switch (type)
             {
                 case FaceRecognizerType.EigenFaceRecognizer:
@@ -120,15 +140,8 @@ namespace FaceDetection
                     tfr.faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
                     break;
             }
-            Mat[] ff = new Mat[] {new Mat(),new Mat() };
-            Image<Gray, byte> pp = new Image<Gray, byte>(new Size(5,5));
-            Image<Gray,byte>[] ppp = new Image<Gray, byte>[] { pp, pp };
-            int[] hh = new int[] { 1, 2 };
-            List<Mat> eee = new List<Mat>();
 
-
-
-            //tfr.faceRecognizer.Train(new Mat(), hh);
+            tfr.faceRecognizer.Train(tfr.TrainedFileList.trainedImage.ToArray(), tfr.TrainedFileList.trainedLabelOrder.ToArray());
             return tfr;
         }
 
@@ -160,6 +173,9 @@ namespace FaceDetection
         private void Form1_Load(object sender, EventArgs e)
         {
             FaceCascadeClassifier = new CascadeClassifier("haarcascade_frontalface_default.xml");
+            Tfr = new TrainedFaceRecognizerFromImage();
+            Tfr.faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
+            Tfr.TrainedFileList = new TrainedFileListFromImage();
         }
 
         private void BtnInPut_Click(object sender, EventArgs e)
@@ -186,14 +202,56 @@ namespace FaceDetection
             foreach (Rectangle rectangle in faceDetectedObj.FaceRectangles)
             {
                 CvInvoke.Rectangle(drawMat, rectangle,new MCvScalar(0,0,255),2);
+                if (CurrentFaceMat != null)
+                    CurrentFaceMat.Dispose();
+                CurrentFaceMat = new Mat(OrgMat, rectangle);
+                CvInvoke.CvtColor(CurrentFaceMat, CurrentFaceMat, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);//轉灰階
+                CvInvoke.EqualizeHist(CurrentFaceMat, CurrentFaceMat);// 均衡灰度
+                CvInvoke.Resize(CurrentFaceMat, CurrentFaceMat,new Size(100,100));
+                FaceRecognizer.PredictionResult rrr = Tfr.faceRecognizer.Predict(CurrentFaceMat);
+                if (rrr.Distance < 500)
+                    CvInvoke.PutText(drawMat, Tfr.TrainedFileList.trainedFileName[rrr.Label],new Point(rectangle.X, rectangle.Y),Emgu.CV.CvEnum.FontFace.HersheyPlain,3, new MCvScalar(0, 0, 255),5);
+                else
+                {
+                    CvInvoke.PutText(drawMat, "UnKnow", new Point(rectangle.X, rectangle.Y), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3, new MCvScalar(0, 0, 255), 5);
+                }
             }
             pictureBox1.Image = drawMat.Bitmap;
+            pictureBox2.Image = CurrentFaceMat.Bitmap;
             GC.Collect();
         }
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
-           TrainedFaceRecognizer ggg = SetTrainedFaceRecognizer(FaceRecognizerType.EigenFaceRecognizer);
+
+            Tfr = SetTrainedFaceRecognizerFromImage(FaceRecognizerType.EigenFaceRecognizer,CurrentFaceMat,textBox1.Text);
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Tfr.faceRecognizer.Save("POIUY");
+            StreamWriter sr = new StreamWriter("Test.txt");
+
+            for(int i =0;i< Tfr.TrainedFileList.trainedLabelOrder.Count;i++)
+            {
+                sr.WriteLine(Tfr.TrainedFileList.trainedLabelOrder[i] + "," + Tfr.TrainedFileList.trainedFileName[i]);
+            }
+            sr.Close();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Tfr.faceRecognizer.Load("POIUY");
+            StreamReader sr = new StreamReader("Test.txt");
+            string[] str;
+            while (!sr.EndOfStream)
+            {
+                str=sr.ReadLine().Split(',');
+                Tfr.TrainedFileList.trainedLabelOrder.Add(Convert.ToInt32(str[0]));
+                Tfr.TrainedFileList.trainedFileName.Add(str[1]);
+            }
+            sr.Close();
         }
     }
     

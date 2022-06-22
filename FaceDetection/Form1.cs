@@ -16,6 +16,7 @@ namespace FaceDetection
 {
     public partial class Form1 : Form
     {
+        /*
         public class TrainedFileList
         {
             public List<Image<Gray, byte>> trainedImage = new List<Image<Gray, byte>>();
@@ -51,7 +52,7 @@ namespace FaceDetection
             FisherFaceRecognizer = 1,
             LBPHFFaceRecognizer = 2,
         };
-        
+        */
         public Form1()
         {
             InitializeComponent();
@@ -60,6 +61,8 @@ namespace FaceDetection
         CascadeClassifier FaceCascadeClassifier;
         Mat OrgMat = new Mat();
         Mat CurrentFaceMat = new Mat();
+        FaceDetected FaceDetected;
+        /*
         TrainedFaceRecognizerFromImage Tfr;
         public TrainedFileList SetSampleFacesList()
         {
@@ -145,10 +148,6 @@ namespace FaceDetection
             return tfr;
         }
 
-
-
-
-
         public faceDetectedObj GetFaceRectangle(Mat emguImage)
         {
             faceDetectedObj fdo = new faceDetectedObj();
@@ -170,12 +169,17 @@ namespace FaceDetection
             fdo.FaceRectangles = face;
             return fdo;
         }
+        */
         private void Form1_Load(object sender, EventArgs e)
         {
+            /*
             FaceCascadeClassifier = new CascadeClassifier("haarcascade_frontalface_default.xml");
             Tfr = new TrainedFaceRecognizerFromImage();
             Tfr.faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
             Tfr.TrainedFileList = new TrainedFileListFromImage();
+            */
+            FaceDetected = new FaceDetected();
+            FaceDetected.LoadTrainedFaceRecognizer();
         }
 
         private void BtnInPut_Click(object sender, EventArgs e)
@@ -197,6 +201,7 @@ namespace FaceDetection
 
         private void BtnDetect_Click(object sender, EventArgs e)
         {
+            /*
             faceDetectedObj faceDetectedObj = GetFaceRectangle(OrgMat);
             Mat drawMat = OrgMat.Clone();
             foreach (Rectangle rectangle in faceDetectedObj.FaceRectangles)
@@ -216,8 +221,9 @@ namespace FaceDetection
                     CvInvoke.PutText(drawMat, "UnKnow", new Point(rectangle.X, rectangle.Y), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3, new MCvScalar(0, 0, 255), 5);
                 }
             }
-            pictureBox1.Image = drawMat.Bitmap;
-            pictureBox2.Image = CurrentFaceMat.Bitmap;
+            */
+            pictureBox1.Image = FaceDetected.DetectedFace(OrgMat,new Size(100,100)).Bitmap;
+            //pictureBox2.Image = CurrentFaceMat.Bitmap;
             GC.Collect();
         }
         

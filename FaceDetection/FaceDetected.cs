@@ -8,5 +8,6 @@ namespace FaceDetection
 {
     class FaceDetected
     {
+        
     }
 }

@@ -179,7 +179,7 @@ namespace FaceDetection
             Tfr.TrainedFileList = new TrainedFileListFromImage();
             */
             FaceDetected = new FaceDetected();
-            FaceDetected.LoadTrainedFaceRecognizer();
+            //FaceDetected.LoadTrainedFaceRecognizer();
         }
 
         private void BtnInPut_Click(object sender, EventArgs e)
@@ -222,42 +222,34 @@ namespace FaceDetection
                 }
             }
             */
-            pictureBox1.Image = FaceDetected.DetectedFace(OrgMat,new Size(100,100)).Bitmap;
+            try
+            {
+                pictureBox1.Image = FaceDetected.DetectedFace(OrgMat, new Size(100, 100)).Bitmap;
+                pictureBox2.Image = FaceDetected.CurrentFaceList[0].Bitmap;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
             //pictureBox2.Image = CurrentFaceMat.Bitmap;
-            GC.Collect();
+            //GC.Collect();
         }
         
         private void button1_Click(object sender, EventArgs e)
         {
-
-            Tfr = SetTrainedFaceRecognizerFromImage(FaceRecognizerType.EigenFaceRecognizer,CurrentFaceMat,textBox1.Text);
+            FaceDetected.SetTrainedFaceRecognizerFromImage(FaceDetected.FaceRecognizerType.EigenFaceRecognizer, FaceDetected.SearchFace(OrgMat, new Size(100, 100))[0], textBox1.Text);
 
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Tfr.faceRecognizer.Save("POIUY");
-            StreamWriter sr = new StreamWriter("Test.txt");
-
-            for(int i =0;i< Tfr.TrainedFileList.trainedLabelOrder.Count;i++)
-            {
-                sr.WriteLine(Tfr.TrainedFileList.trainedLabelOrder[i] + "," + Tfr.TrainedFileList.trainedFileName[i]);
-            }
-            sr.Close();
+            FaceDetected.SaveTrainedFaceRecognizer();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            Tfr.faceRecognizer.Load("POIUY");
-            StreamReader sr = new StreamReader("Test.txt");
-            string[] str;
-            while (!sr.EndOfStream)
-            {
-                str=sr.ReadLine().Split(',');
-                Tfr.TrainedFileList.trainedLabelOrder.Add(Convert.ToInt32(str[0]));
-                Tfr.TrainedFileList.trainedFileName.Add(str[1]);
-            }
-            sr.Close();
+            FaceDetected.ClearTrainedFaceRecognizer();
         }
     }
     

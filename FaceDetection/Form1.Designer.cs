@@ -51,7 +51,7 @@
             // pictureBox2
             // 
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(924, 49);
+            this.pictureBox2.Location = new System.Drawing.Point(864, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(166, 165);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -60,9 +60,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(952, 405);
+            this.button1.Location = new System.Drawing.Point(864, 297);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(106, 34);
+            this.button1.Size = new System.Drawing.Size(166, 49);
             this.button1.TabIndex = 5;
             this.button1.Text = "Train";
             this.button1.UseVisualStyleBackColor = true;
@@ -71,16 +71,19 @@
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Location = new System.Drawing.Point(952, 445);
+            this.textBox1.Font = new System.Drawing.Font("新細明體", 16F);
+            this.textBox1.ImeMode = System.Windows.Forms.ImeMode.Disable;
+            this.textBox1.Location = new System.Drawing.Point(864, 352);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(105, 22);
+            this.textBox1.Size = new System.Drawing.Size(166, 33);
             this.textBox1.TabIndex = 6;
+            this.textBox1.WordWrap = false;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(952, 492);
+            this.button3.Location = new System.Drawing.Point(864, 439);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(106, 34);
+            this.button3.Size = new System.Drawing.Size(166, 43);
             this.button3.TabIndex = 9;
             this.button3.Text = "Save Train";
             this.button3.UseVisualStyleBackColor = true;
@@ -88,9 +91,9 @@
             // 
             // btnOpenCam
             // 
-            this.btnOpenCam.Location = new System.Drawing.Point(952, 220);
+            this.btnOpenCam.Location = new System.Drawing.Point(864, 195);
             this.btnOpenCam.Name = "btnOpenCam";
-            this.btnOpenCam.Size = new System.Drawing.Size(105, 36);
+            this.btnOpenCam.Size = new System.Drawing.Size(166, 51);
             this.btnOpenCam.TabIndex = 10;
             this.btnOpenCam.Text = "OpenCamra";
             this.btnOpenCam.UseVisualStyleBackColor = true;

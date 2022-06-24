@@ -60,7 +60,7 @@ namespace FaceDetection
         public FaceRecognizerFromImage FaceRecognizer;
         private CascadeClassifier FaceCascadeClassifier;
 
-        public Mat DetectedFace(Mat ScrMat)
+        public Mat DetectedFace(Mat ScrMat, Size size, int distance = 500)
         {
             faceDetectedObj faceDetectedObj = GetFaceRectangle(ScrMat);
             Mat drawMat = ScrMat.Clone();
@@ -70,19 +70,20 @@ namespace FaceDetection
                 CvInvoke.Rectangle(drawMat, rectangle, new MCvScalar(0, 0, 255), 2);
                 if (currentFaceMat != null)
                     currentFaceMat.Dispose();
-                currentFaceMat = new Mat(OrgMat, rectangle);
+                currentFaceMat = new Mat(ScrMat, rectangle);
                 CvInvoke.CvtColor(currentFaceMat, currentFaceMat, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);//轉灰階
                 CvInvoke.EqualizeHist(currentFaceMat, currentFaceMat);// 均衡灰度
-                CvInvoke.Resize(currentFaceMat, currentFaceMat, new Size(100, 100));
+                CvInvoke.Resize(currentFaceMat, currentFaceMat, size);
                 FaceRecognizer.PredictionResult rrr = FaceRecognizer.faceRecognizer.Predict(currentFaceMat);
-                if (rrr.Distance < 500)
+                if (rrr.Distance < distance)
                     CvInvoke.PutText(drawMat, FaceRecognizer.TrainedFileList.trainedFileName[rrr.Label], new Point(rectangle.X, rectangle.Y), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3, new MCvScalar(0, 0, 255), 5);
                 else
                 {
                     CvInvoke.PutText(drawMat, "UnKnow", new Point(rectangle.X, rectangle.Y), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3, new MCvScalar(0, 0, 255), 5);
                 }
             }
-            return 
+            GC.Collect();
+            return drawMat;
         }
 
         public TrainedFileList SetSampleFacesList()

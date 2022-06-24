@@ -11,257 +11,82 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Face;
+using System.Threading;
 
 namespace FaceDetection
 {
     public partial class Form1 : Form
     {
-        /*
-        public class TrainedFileList
-        {
-            public List<Image<Gray, byte>> trainedImage = new List<Image<Gray, byte>>();
-            public List<int> trainedLabelOrder = new List<int>();
-            public List<string> trainedFileName = new List<string>();
-        }
-        public class TrainedFaceRecognizer
-        {
-            public FaceRecognizer faceRecognizer;
-            public TrainedFileList TrainedFileList;
-        }
-
-        public class TrainedFileListFromImage
-        {
-            public List<Image<Gray,byte>> trainedImage = new List<Image<Gray, byte>>();
-            public List<int> trainedLabelOrder = new List<int>();
-            public List<string> trainedFileName = new List<string>();
-        }
-        public class TrainedFaceRecognizerFromImage
-        {
-            public FaceRecognizer faceRecognizer;
-            public TrainedFileListFromImage TrainedFileList;
-        }
-        public class faceDetectedObj
-        {
-            public Mat originalImg;
-            public List<Rectangle> FaceRectangles;
-            public List<string> name = new List<string>();
-        }
-        public enum FaceRecognizerType
-        {
-            EigenFaceRecognizer = 0,
-            FisherFaceRecognizer = 1,
-            LBPHFFaceRecognizer = 2,
-        };
-        */
         public Form1()
         {
             InitializeComponent();
         }
-
-        CascadeClassifier FaceCascadeClassifier;
-        Mat OrgMat = new Mat();
-        Mat CurrentFaceMat = new Mat();
         FaceDetected FaceDetected;
-        /*
-        TrainedFaceRecognizerFromImage Tfr;
-        public TrainedFileList SetSampleFacesList()
-        {
-            TrainedFileList tf = new TrainedFileList();
-            DirectoryInfo di = new DirectoryInfo("TrainedFace");
-            int i = 0;
-            foreach (FileInfo fi in di.GetFiles())
-            {
-                tf.trainedImage.Add(new Image<Gray, byte>(fi.FullName));
-                tf.trainedLabelOrder.Add(i);
-                tf.trainedFileName.Add(fi.Name.Split('_')[0]);
-                i++;
-            }
-            return tf;
-        }
-        public TrainedFaceRecognizer SetTrainedFaceRecognizer(FaceRecognizerType type)
-        {
-            TrainedFaceRecognizer tfr = new TrainedFaceRecognizer();
-            tfr.TrainedFileList = SetSampleFacesList();
-            switch (type)
-            {
-                case FaceRecognizerType.EigenFaceRecognizer:
-                    tfr.faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
-                    break;
+        Capture Cap;
+        Mat _SrcImage;
+        Size _Size;
+        object key = new object();
 
-                case FaceRecognizerType.FisherFaceRecognizer:
-                    tfr.faceRecognizer = new FisherFaceRecognizer(80, 3500);
-                    break;
-
-                case FaceRecognizerType.LBPHFFaceRecognizer:
-                    tfr.faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
-                    break; 
-            }
-            tfr.faceRecognizer.Train(tfr.TrainedFileList.trainedImage.ToArray(), tfr.TrainedFileList.trainedLabelOrder.ToArray());
-            return tfr;
-        }
-
-
-        public TrainedFaceRecognizerFromImage SetTrainedFaceRecognizerFromImage(FaceRecognizerType type,Mat srcMat,string name)
-        {
-
-            TrainedFaceRecognizerFromImage tfr = new TrainedFaceRecognizerFromImage();
-            TrainedFileListFromImage tfList = new TrainedFileListFromImage();
-
-            //tfList.trainedFileName.Add(name);
-            //tfList.trainedImage.Add(srcMat.ToImage<Gray,byte>());
-            //if (Tfr != null)
-            //    tfList.trainedLabelOrder.Add(Tfr.TrainedFileList.trainedLabelOrder.Count() + 1);
-            //else
-            //    tfList.trainedLabelOrder.Add(0);
-            //tfr.TrainedFileList = tfList;
-            if (Tfr.TrainedFileList==null || Tfr.TrainedFileList.trainedLabelOrder.Count ==0)
-            {
-                tfList.trainedFileName.Add(name);
-                tfList.trainedImage.Add(srcMat.ToImage<Gray, byte>());
-                tfList.trainedLabelOrder.Add(0);
-            }
-            else
-            {
-                tfList = Tfr.TrainedFileList;
-                tfList.trainedFileName.Add(name);
-                tfList.trainedImage.Add(srcMat.ToImage<Gray, byte>());
-                tfList.trainedLabelOrder.Add(tfList.trainedLabelOrder.Count());
-            }
-            tfr.TrainedFileList = tfList;
-
-            switch (type)
-            {
-                case FaceRecognizerType.EigenFaceRecognizer:
-                    tfr.faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
-                    break;
-
-                case FaceRecognizerType.FisherFaceRecognizer:
-                    tfr.faceRecognizer = new FisherFaceRecognizer(80, 3500);
-                    break;
-
-                case FaceRecognizerType.LBPHFFaceRecognizer:
-                    tfr.faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
-                    break;
-            }
-
-            tfr.faceRecognizer.Train(tfr.TrainedFileList.trainedImage.ToArray(), tfr.TrainedFileList.trainedLabelOrder.ToArray());
-            return tfr;
-        }
-
-        public faceDetectedObj GetFaceRectangle(Mat emguImage)
-        {
-            faceDetectedObj fdo = new faceDetectedObj();
-            fdo.originalImg = emguImage;
-            List<Rectangle> face = new List<Rectangle>();
-            
-            try
-            {
-                Mat ugray = new Mat();
-                CvInvoke.CvtColor(emguImage, ugray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);//轉灰階
-                CvInvoke.EqualizeHist(ugray,ugray);// 均衡灰度
-                Rectangle[] faceDetected = FaceCascadeClassifier.DetectMultiScale(ugray, 1.1, 10, new Size(20, 20));
-                face.AddRange(faceDetected);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-            fdo.FaceRectangles = face;
-            return fdo;
-        }
-        */
+        bool IsRuncap;
         private void Form1_Load(object sender, EventArgs e)
         {
-            /*
-            FaceCascadeClassifier = new CascadeClassifier("haarcascade_frontalface_default.xml");
-            Tfr = new TrainedFaceRecognizerFromImage();
-            Tfr.faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
-            Tfr.TrainedFileList = new TrainedFileListFromImage();
-            */
-            FaceDetected = new FaceDetected();
+            FaceDetected = new FaceDetected(FaceDetected.FaceRecognizerType.LBPHFFaceRecognizer);
             FaceDetected.LoadTrainedFaceRecognizer();
+            _Size = new Size(100, 100);
         }
-
-        private void BtnInPut_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                OpenFileDialog path = new OpenFileDialog();
-                if (path.ShowDialog() != DialogResult.OK)
-                    return;
-                OrgMat = CvInvoke.Imread(path.FileName, Emgu.CV.CvEnum.LoadImageType.AnyColor);
-                pictureBox1.Image = OrgMat.Bitmap;
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            GC.Collect();
-        }
-
-        private void BtnDetect_Click(object sender, EventArgs e)
-        {
-            /*
-            faceDetectedObj faceDetectedObj = GetFaceRectangle(OrgMat);
-            Mat drawMat = OrgMat.Clone();
-            foreach (Rectangle rectangle in faceDetectedObj.FaceRectangles)
-            {
-                CvInvoke.Rectangle(drawMat, rectangle,new MCvScalar(0,0,255),2);
-                if (CurrentFaceMat != null)
-                    CurrentFaceMat.Dispose();
-                CurrentFaceMat = new Mat(OrgMat, rectangle);
-                CvInvoke.CvtColor(CurrentFaceMat, CurrentFaceMat, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);//轉灰階
-                CvInvoke.EqualizeHist(CurrentFaceMat, CurrentFaceMat);// 均衡灰度
-                CvInvoke.Resize(CurrentFaceMat, CurrentFaceMat,new Size(100,100));
-                FaceRecognizer.PredictionResult rrr = Tfr.faceRecognizer.Predict(CurrentFaceMat);
-                if (rrr.Distance < 500)
-                    CvInvoke.PutText(drawMat, Tfr.TrainedFileList.trainedFileName[rrr.Label],new Point(rectangle.X, rectangle.Y),Emgu.CV.CvEnum.FontFace.HersheyPlain,3, new MCvScalar(0, 0, 255),5);
-                else
-                {
-                    CvInvoke.PutText(drawMat, "UnKnow", new Point(rectangle.X, rectangle.Y), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3, new MCvScalar(0, 0, 255), 5);
-                }
-            }
-            */
-            pictureBox1.Image = FaceDetected.DetectedFace(OrgMat,new Size(100,100)).Bitmap;
-            //pictureBox2.Image = CurrentFaceMat.Bitmap;
-            GC.Collect();
-        }
-        
         private void button1_Click(object sender, EventArgs e)
         {
-
-            Tfr = SetTrainedFaceRecognizerFromImage(FaceRecognizerType.EigenFaceRecognizer,CurrentFaceMat,textBox1.Text);
-
+             FaceDetected.SetTrainedFaceRecognizerFromImage(FaceDetected.FaceRecognizerType.LBPHFFaceRecognizer, FaceDetected.CurrentFaceList[0], textBox1.Text);
+            //AutoTrained = true;
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
-            Tfr.faceRecognizer.Save("POIUY");
-            StreamWriter sr = new StreamWriter("Test.txt");
-
-            for(int i =0;i< Tfr.TrainedFileList.trainedLabelOrder.Count;i++)
+            FaceDetected.SaveTrainedFaceRecognizer();
+        }
+        private void ShowImage()
+        {
+            while (IsRuncap)
             {
-                sr.WriteLine(Tfr.TrainedFileList.trainedLabelOrder[i] + "," + Tfr.TrainedFileList.trainedFileName[i]);
+               
+                _SrcImage = Cap.QueryFrame();
+                lock (key)
+                {
+                    if (pictureBox1.Image != null)
+                    {
+                        _SrcImage = FaceDetected.DetectedFace(_SrcImage, _Size, 100);  
+                    }
+
+                    CvInvoke.Resize(_SrcImage, _SrcImage, pictureBox1.Size);
+                    Bitmap oldBitmap = pictureBox1.Image as Bitmap;
+                    pictureBox1.Image = _SrcImage.Bitmap;
+                    if (oldBitmap != null)
+                    {
+                        oldBitmap.Dispose();
+                    }
+                    if(FaceDetected._CurrentFace!=null)
+                        pictureBox2.Image = FaceDetected._CurrentFace.Bitmap;
+                    Thread.Sleep(20);
+                }
             }
-            sr.Close();
+
+        }
+        private void btnOpenCam_Click(object sender, EventArgs e)
+        {
+            if (!IsRuncap)
+            {
+                IsRuncap = true;
+                Cap = new Capture();
+                _SrcImage = new Mat();
+                Cap.Start();
+                Thread T1 = new Thread(ShowImage);
+                T1.Start();
+            }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Tfr.faceRecognizer.Load("POIUY");
-            StreamReader sr = new StreamReader("Test.txt");
-            string[] str;
-            while (!sr.EndOfStream)
-            {
-                str=sr.ReadLine().Split(',');
-                Tfr.TrainedFileList.trainedLabelOrder.Add(Convert.ToInt32(str[0]));
-                Tfr.TrainedFileList.trainedFileName.Add(str[1]);
-            }
-            sr.Close();
+            Cap.Stop();
+            IsRuncap = false;
         }
     }
-    
-
- 
-
 }

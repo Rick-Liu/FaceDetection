@@ -26,17 +26,19 @@ namespace FaceDetection
         Mat _SrcImage;
         Size _Size;
         object key = new object();
-
+        FaceDetected.FaceRecognizerType RecognizerType = FaceDetected.FaceRecognizerType.LBPHFFaceRecognizer;
         bool IsRuncap;
         private void Form1_Load(object sender, EventArgs e)
         {
-            FaceDetected = new FaceDetected(FaceDetected.FaceRecognizerType.LBPHFFaceRecognizer);
+            FaceDetected = new FaceDetected(RecognizerType);
             FaceDetected.LoadTrainedFaceRecognizer();
             _Size = new Size(100, 100);
         }
         private void button1_Click(object sender, EventArgs e)
         {
-             FaceDetected.SetTrainedFaceRecognizerFromImage(FaceDetected.FaceRecognizerType.LBPHFFaceRecognizer, FaceDetected.CurrentFaceList[0], textBox1.Text);
+            if (TrainNameBox.Text.Trim() == "" || FaceDetected.CurrentFaceList.Count < 1)
+                return;
+            FaceDetected.SetTrainedFaceRecognizerFromImage(RecognizerType, FaceDetected.CurrentFaceList[0], TrainNameBox.Text);
             //AutoTrained = true;
         }
         private void button3_Click(object sender, EventArgs e)
@@ -45,47 +47,65 @@ namespace FaceDetection
         }
         private void ShowImage()
         {
-            while (IsRuncap)
+            try
             {
-               
-                _SrcImage = Cap.QueryFrame();
-                lock (key)
+                while (IsRuncap)
                 {
-                    if (pictureBox1.Image != null)
+                    _SrcImage = Cap.QueryFrame();
+                    lock (key)
                     {
-                        _SrcImage = FaceDetected.DetectedFace(_SrcImage, _Size, 100);  
-                    }
+                        if (pictureBox1.Image != null)
+                        {
+                            _SrcImage = FaceDetected.DetectedFace(_SrcImage, _Size, 100);
+                        }
 
-                    CvInvoke.Resize(_SrcImage, _SrcImage, pictureBox1.Size);
-                    Bitmap oldBitmap = pictureBox1.Image as Bitmap;
-                    pictureBox1.Image = _SrcImage.Bitmap;
-                    if (oldBitmap != null)
-                    {
-                        oldBitmap.Dispose();
+                        CvInvoke.Resize(_SrcImage, _SrcImage, pictureBox1.Size);
+                        Bitmap oldBitmap = pictureBox1.Image as Bitmap;
+                        pictureBox1.Image = _SrcImage.Bitmap;
+                        if (oldBitmap != null)
+                        {
+                            oldBitmap.Dispose();
+                        }
+                        if (FaceDetected._CurrentFace != null)
+                            pictureBox2.Image = FaceDetected._CurrentFace.Bitmap;
+                        Thread.Sleep(20);
                     }
-                    if(FaceDetected._CurrentFace!=null)
-                        pictureBox2.Image = FaceDetected._CurrentFace.Bitmap;
-                    Thread.Sleep(20);
                 }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                IsRuncap = false;
             }
 
         }
         private void btnOpenCam_Click(object sender, EventArgs e)
         {
-            if (!IsRuncap)
+            try 
             {
-                IsRuncap = true;
-                Cap = new Capture();
-                _SrcImage = new Mat();
-                Cap.Start();
-                Thread T1 = new Thread(ShowImage);
-                T1.Start();
+                if (!IsRuncap)
+                {
+                    Cap = new Capture(0);
+                    if (Cap.Width == 0 || Cap.Height == 0)
+                        throw new Exception("Can't Find Camera");
+                    _SrcImage = new Mat();
+                    Cap.Start();
+                    IsRuncap = true;
+                    Thread T1 = new Thread(ShowImage);
+                    T1.Start();
+                }
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Cap.Stop();
+            if(Cap!=null)
+                Cap.Stop();
             IsRuncap = false;
         }
     }

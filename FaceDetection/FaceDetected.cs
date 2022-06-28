@@ -37,17 +37,6 @@ namespace FaceDetection
             FaceRecognizer.TrainedFileList = new FaceRecognizerListFromImage();
             CurrentFaceList = new List<Mat>();
         }
-        public class TrainedFileList
-        {
-            public List<Image<Gray, byte>> trainedImage = new List<Image<Gray, byte>>();
-            public List<int> trainedLabelOrder = new List<int>();
-            public List<string> trainedFileName = new List<string>();
-        }
-        public class TrainedFaceRecognizer
-        {
-            public FaceRecognizer faceRecognizer;
-            public TrainedFileList TrainedFileList;
-        }
         public class FaceRecognizerListFromImage
         {
             public List<Image<Gray, byte>> trainedImage = new List<Image<Gray, byte>>();

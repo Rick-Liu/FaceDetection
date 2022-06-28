@@ -31,7 +31,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TrainNameBox = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.btnOpenCam = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -68,16 +68,16 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
+            // TrainNameBox
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("新細明體", 16F);
-            this.textBox1.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.textBox1.Location = new System.Drawing.Point(864, 352);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(166, 33);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.WordWrap = false;
+            this.TrainNameBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TrainNameBox.Font = new System.Drawing.Font("新細明體", 16F);
+            this.TrainNameBox.ImeMode = System.Windows.Forms.ImeMode.Disable;
+            this.TrainNameBox.Location = new System.Drawing.Point(864, 352);
+            this.TrainNameBox.Name = "TrainNameBox";
+            this.TrainNameBox.Size = new System.Drawing.Size(166, 33);
+            this.TrainNameBox.TabIndex = 6;
+            this.TrainNameBox.WordWrap = false;
             // 
             // button3
             // 
@@ -103,10 +103,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 707);
+            this.ClientSize = new System.Drawing.Size(1039, 619);
             this.Controls.Add(this.btnOpenCam);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TrainNameBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
@@ -127,7 +127,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TrainNameBox;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnOpenCam;
     }
